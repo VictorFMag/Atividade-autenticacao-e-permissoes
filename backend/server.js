@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 3000;
-const userController = require('./controller/userController');
-
 app.use(cors());
 app.use(express.json());
+const port = 3000;
+
+const userController = require('./controller/userController');
+const db = require('./database/database')
+db.sync(() => console.log(`Banco de dados conectado: ${process.env.DB_NAME}`));
 
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
@@ -26,10 +28,10 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-app.post('/cadastro', (req, res, next) => {
+app.post('/cadastro', (req, res) => {
     userController.createUser({
         userName: req.body.userName,
-        password: req.body.passWord,
+        password: req.body.password,
         isAdmin: req.body.isAdmin
     })
         .then((item) => res.send(item))

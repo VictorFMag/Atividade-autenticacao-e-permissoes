@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const database = require('../database/database');
- 
+
 const User = database.define('user', {
     userName: {
         type: Sequelize.STRING,
@@ -16,5 +16,5 @@ const User = database.define('user', {
         allowNull: false
     }
 })
- 
+
 module.exports = User;
