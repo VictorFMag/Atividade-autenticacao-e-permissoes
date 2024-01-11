@@ -17,6 +17,7 @@
         function logout() {
             // Limpar informação de login da sessionStorage
             sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('isAdmin');
 
             // Redirecionar de volta para a página de Login
             window.location.href = 'login.html';
@@ -32,9 +33,8 @@
             }
 
             const isAdmin = sessionStorage.getItem('isAdmin');
-            console.log(isAdmin)
 
-            if (isAdmin == "true") {
+            if (isAdmin == "true") { // Sefor admin aparece o botao de administrar o site
                 const button = document.createElement('button');
                 button.textContent = "Administrar Site";
                 button.id = "adm-site"
