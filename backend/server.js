@@ -12,20 +12,17 @@ db.sync(() => console.log(`Banco de dados conectado: ${process.env.DB_NAME}`));
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
 
-    const userData = userController.getUser(username);
-
-    // Verifique as credenciais (pode ser feito de forma mais segura no ambiente de produção)
-    if (userData && userData.password === password) {
-        // Envia uma resposta de sucesso
-        if (userData.isAdmin) {
-            res.status(200).json({ success: true, isAdmin: true });
-        } else {
-            res.status(200).json({ success: true, isAdmin: false });
-        }
-    } else {
-        // Envie uma resposta de erro
-        res.status(401).json({ success: false, message: 'Credenciais inválidas' });
-    }
+    userController.getUser(username)
+        .then(userData => {
+            if (userData.password === password) {
+                userData.isAdmin ? res.status(200).send({ success: true, isAdmin: true }) : res.status(200).send({ success: true, isAdmin: false });
+            } else {
+                res.status(500).send({ success: false, message: "Credenciais incorretas!" });
+            };
+        })
+        .catch(error => {
+            res.status(500).send({ message: 'Erro interno ao buscar usuário' });
+        });
 });
 
 app.post('/cadastro', (req, res) => {
@@ -38,6 +35,14 @@ app.post('/cadastro', (req, res) => {
         .catch((err) => {
             console.log('Erro no cadastro do usuario', JSON.stringify(err))
             return res.status(400).send(err)
+        });
+});
+
+app.get('/cadastro', (req, res, next) => {
+    userController.listUsers().then((items) => res.send(items))
+        .catch((err) => {
+            console.log('Erro na consulta do usuário', JSON.stringify(err))
+            return res.send(err)
         });
 });
 

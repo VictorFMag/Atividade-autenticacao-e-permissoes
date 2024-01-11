@@ -33,12 +33,12 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username, password })
             })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Armazenar informação de login na sessionStorage
+                        // Armazenar informações de login na sessionStorage
                         sessionStorage.setItem('isLoggedIn', true);
 
                         if (data.isAdmin) {
